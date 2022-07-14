@@ -1,0 +1,33 @@
+sourceTopic: ${SOURCE_TOPIC}
+
+logging:
+  level:
+    ch.raciborski.kafka: DEBUG
+
+spring:
+  kafka:
+    listener:
+      ack-mode: manual_immediate
+      concurrency: 2
+    bootstrap-servers: ${BOOTSTRAP_SERVERS}:${PORT}
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      group-id: c0desurfer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: ch.raciborski.kafka
+      enable-auto-commit: false
+    ssl:
+      trust-store-location: file://${TRUSTSTORE_LOCATION}
+      trust-store-password: ${TRUSTSTORE_PASSWORD}
+      trust-store-type: PKCS12
+    properties:
+      security:
+        protocol: SASL_SSL
+      sasl:
+        mechanism: SCRAM-SHA-512
+        jaas:
+          config: org.apache.kafka.common.security.scram.ScramLoginModule required username="${SCRAM_USERNAME}" password="${SCRAM_PASSWORD}";
